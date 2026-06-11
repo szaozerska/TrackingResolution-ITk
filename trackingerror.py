@@ -873,14 +873,3 @@ def main():
 if __name__ =="__main__":
     main()
 
-
-# This plots the resolution on the transverse impact parameter for 
-# the CMS HL-LHC tracker configuration and a muon mass hypothesis. 
-# Please note that only the barrel layers are included.
-# plot("CMS.txt",'sigma(d)',B=4,eta=0.,m=0.106)
-
-# This plots the resolution on the transverse impact parameter for 
-# the ATLAS HL-LHC tracker configuration and a muon mass hypothesis. 
-# Please note that only the barrel layers are included.
-# plot("ATLAS.txt",'sigma(d)',B=2,eta=0.,m=0.106)
-
