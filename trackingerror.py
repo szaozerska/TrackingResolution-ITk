@@ -71,6 +71,15 @@ class Layer:
         self.ms = ms                    # multiple scattering deviation (angular resolution)
         self.position = position        # position of the layer from interaction point
 
+    def __repr__(self):
+        return self.__str__()
+
+    def __str__(self):
+        # Compact single-line representation for a layer
+        return ("Layer(pos={:.6g} m, d={:.6g} X0, res_xy={:.6g}, "
+                "res_z={:.6g}, ms={:.6g})").format(
+                    self.position, self.d, self.res_xy, self.res_z, self.ms)
+
 
 ####### COEFFICIENTS AND CONVERSIONS #######
 
@@ -172,6 +181,19 @@ class Detector:
         self.layers = []                # List of Layer objects    
         self.layerpositions = []        # Sorted list of layer positions
         self.N = 0                      # Number of layers
+
+    def __repr__(self):
+        return self.__str__()
+
+    def __str__(self):
+        # Nicely formatted multi-line table of layers
+        header = "Detector: %d layers" % self.N
+        cols = "Idx\tPosition[m]\td[X0]\tres_xy\tres_z\tms"
+        lines = [header, cols]
+        for i, l in enumerate(self.layers):
+            lines.append("%d\t%.6g\t%.6g\t%.6g\t%.6g\t%.6g" % (
+                i+1, l.position, l.d, l.res_xy, l.res_z, l.ms))
+        return "\n".join(lines)
         
     def addlayer(self, d, res_xy, res_z, position):
         """
@@ -818,7 +840,7 @@ def plot_fixedeta(source, var, B=2, eta=0, m=0.106, input_mode='file', label=Non
     
     return mydetector
 
-def plot_fixedp(source, var, B=2, p=1, m=0.106, input_mode='file', label=None) -> Detector:
+def plot_fixedp(source, var, B=2, p=1, m=0.106, input_mode='file', label=None, eta_max=2.5) -> Detector:
     """
     Plot a selected error `var` versus pseudorapidity for fixed pT `p`.
 
@@ -844,7 +866,7 @@ def plot_fixedp(source, var, B=2, p=1, m=0.106, input_mode='file', label=None) -
         mydetector = inputfromfile(filename, 1)
     elif input_mode == 'detector':
         mydetector = source
-    eta = np.linspace(0, 2.5, 100)
+    eta = np.linspace(0, eta_max, 100)
     y = []
     for i in range(len(eta)):
         y.append(mydetector.errorcalculation(p, B, eta[i], m)[var])

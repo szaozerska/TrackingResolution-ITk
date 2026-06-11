@@ -37,3 +37,8 @@ def ITk():
     detector.addlayer2(Strip4)
     
     return detector
+
+def ITk_adjust_r0(r0):
+    detector = ITk()
+    detector.layers[0].position = r0
+    return detector
