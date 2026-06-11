@@ -730,6 +730,7 @@ def ATLAS():
     # unknown configuration, trying to identify where it comes from
     # couldn't find it in the documentation of ATLAS so far, but I haven't searched as much
     # probably simplified, moving on for now
+    # Update: ITk from somewhere, TODO identify where it comes from
     Pixel1=Layer(0.0067, 5.0e-5/sqrt(12), 5.0e-5/sqrt(12), 0.039)
     Pixel2=Layer(0.0067, 5.0e-5/sqrt(12), 5.0e-5/sqrt(12), 0.099)
     Pixel3=Layer(0.0067, 5.0e-5/sqrt(12), 5.0e-5/sqrt(12), 0.16)
@@ -765,7 +766,7 @@ def ATLAS():
 # will be shown as a function of pT. If multiple instances of "plot" are called, the results will be 
 # overlaid in a single plot.
 
-def plot_fixedeta(filename, var, B=2, eta=0, m=0.106):
+def plot_fixedeta(source, var, B=2, eta=0, m=0.106, input_mode='file', label=None) -> Detector:
     """
     Plot a selected error `var` versus pT at fixed pseudorapidity `eta`.
 
@@ -774,7 +775,9 @@ def plot_fixedeta(filename, var, B=2, eta=0, m=0.106):
     single plot. Returns the `Detector` instance used for the computation.
     
     Args:
-        filename (str): Path to detector configuration file
+        input_mode (str): Mode for input source ('file' or 'detector')
+        source (str or Detector): Path to detector configuration file or Detector instance
+        label (str): Optional label for the plot legend (default: None, uses filename)
         var (str): Error variable to plot among:
                    'sigma(d)', 'sigma(z)', 'sigma(phi)', 
                    'sigma(theta)', 'sigma(pt)/pt'
@@ -785,7 +788,13 @@ def plot_fixedeta(filename, var, B=2, eta=0, m=0.106):
     Returns:
         Detector: The detector instance constructed and used for the calculation.
     """
-    mydetector = inputfromfile(filename, 1)
+    if input_mode == 'file':
+        filename = source
+        mydetector = inputfromfile(filename, 1)
+    elif input_mode == 'detector':
+        mydetector = source
+    else:
+        raise ValueError("Invalid input_mode. Must be 'file' or 'detector'.")
     p = np.logspace(-0.1,2.1)
     y = []
     for i in range(len(p)):
@@ -793,7 +802,10 @@ def plot_fixedeta(filename, var, B=2, eta=0, m=0.106):
     print("Resolution in the first pt bin", y[0])
     
     plt.xscale('log')
-    LegLabel=filename + ', eta=' + str(eta) + ', mass=' + str(m)
+    if label is not None:
+        LegLabel = label
+    else:
+        LegLabel = filename + ', eta=' + str(eta) + ', mass=' + str(m)
     plt.plot(p, y, label=LegLabel)
     plt.legend()
     ylabel=var
@@ -806,7 +818,7 @@ def plot_fixedeta(filename, var, B=2, eta=0, m=0.106):
     
     return mydetector
 
-def plot_fixedp(filename, var, B=2, p=1, m=0.106):
+def plot_fixedp(source, var, B=2, p=1, m=0.106, input_mode='file', label=None) -> Detector:
     """
     Plot a selected error `var` versus pseudorapidity for fixed pT `p`.
 
@@ -815,7 +827,8 @@ def plot_fixedp(filename, var, B=2, p=1, m=0.106):
     single plot. Returns the `Detector` instance used for the computation.
     
     Args:
-        filename (str): Path to detector configuration file
+        input_mode (str): Mode for input source ('file' or 'detector')
+        source (str or Detector): Path to detector configuration file or Detector instance
         var (str): Error variable to plot among:
                    'sigma(d)', 'sigma(z)', 'sigma(phi)', 
                    'sigma(theta)', 'sigma(pt)/pt'
@@ -826,13 +839,20 @@ def plot_fixedp(filename, var, B=2, p=1, m=0.106):
     Returns:
         Detector: The detector instance constructed and used for the calculation.
     """
-    mydetector = inputfromfile(filename, 1)
+    if input_mode == 'file':
+        filename = source
+        mydetector = inputfromfile(filename, 1)
+    elif input_mode == 'detector':
+        mydetector = source
     eta = np.linspace(0, 2.5, 100)
     y = []
     for i in range(len(eta)):
         y.append(mydetector.errorcalculation(p, B, eta[i], m)[var])
     print("Resolution in the first eta bin", y[0])
-    LegLabel = filename + ', p=' + str(p) + ' GeV, mass=' + str(m)
+    if label is not None:
+        LegLabel = label
+    else:
+        LegLabel = filename + ', p=' + str(p) + ' GeV, mass=' + str(m)
     plt.plot(eta, y, label=LegLabel)
     plt.legend()
     ylabel=var
