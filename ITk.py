@@ -11,14 +11,13 @@ from math import sqrt
 from trackingerror import Layer, Detector
 
 def ITk():
-    # TODO update radiation length?
+    # Radiation length might need to be updated for more precise results
     Pixel1=Layer(0.0174, 2.5e-5/sqrt(12), 10.0e-5/sqrt(12), 0.034)
     Pixel2=Layer(0.0174, 5.0e-5/sqrt(12), 5.0e-5/sqrt(12), 0.099)
     Pixel3=Layer(0.0174, 5.0e-5/sqrt(12), 5.0e-5/sqrt(12), 0.16)
     Pixel4=Layer(0.0174, 5.0e-5/sqrt(12), 5.0e-5/sqrt(12), 0.228)
     Pixel5=Layer(0.0174, 5.0e-5/sqrt(12), 5.0e-5/sqrt(12), 0.291)
     
-    # TODO update radiation length?
     # 0.0675 = Radiation length taken as 0.27/4 from the figures in https://iopscience.iop.org/article/10.1088/1748-0221/20/02/P02018/pdf
     Strip1=Layer(0.0505, 8.0e-5/sqrt(12), 8.0e-5/sqrt(12), 0.399)
     Strip2=Layer(0.0505, 8.0e-5/sqrt(12), 8.0e-5/sqrt(12), 0.562)

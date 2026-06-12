@@ -21,20 +21,22 @@ def ATLAS_PhaseII():
     # and 𝜂 directions resp.) of 50×400µm2; the IBL uses planar sensors with 50×250µm2 pixel pitch"
     # (from the ATLAS report, May 2026)
     
-    # TODO should it be a different value for the pixel resolution? I am taking it
-    # similarly to pitch/sqrt(12) as was done in the initial version of the package, but
-    # I am unsure if that's precise enough. Leaving as is for now
+    # Taking the pixel resolution similarly to pitch/sqrt(12) for the strip layers, 
+    # as it was done in the initial package 
     Pixel1=Layer(0.019, 5.0e-5/sqrt(12), 2.5e-5/sqrt(12), 0.03325)   # IBL layer
-    Pixel2=Layer(0.028, 5.0e-5/sqrt(12), 40e-5/sqrt(12), 0.0505)    # B-layer
-    Pixel3=Layer(0.028, 5.0e-5/sqrt(12), 40e-5/sqrt(12), 0.0885)    # Layer 1
-    Pixel4=Layer(0.028, 5.0e-5/sqrt(12), 40e-5/sqrt(12), 0.1225)    # Layer 2
-    # 4 layers total, not 5!
+    Pixel2=Layer(0.028, 5.0e-5/sqrt(12), 40e-5/sqrt(12), 0.0505)     # B-layer
+    Pixel3=Layer(0.028, 5.0e-5/sqrt(12), 40e-5/sqrt(12), 0.0885)     # Layer 1
+    Pixel4=Layer(0.028, 5.0e-5/sqrt(12), 40e-5/sqrt(12), 0.1225)     # Layer 2
+    # 4 layers total
     # The radiation length is concerningly big, but it seems like that is the value in the report
     
     Strip1=Layer(0.0875, 8.0e-5/sqrt(12), 8.0e-5/sqrt(12), 0.299)
     Strip2=Layer(0.0875, 8.0e-5/sqrt(12), 8.0e-5/sqrt(12), 0.371)
     Strip3=Layer(0.0875, 8.0e-5/sqrt(12), 8.0e-5/sqrt(12), 0.443)
     Strip4=Layer(0.0875, 8.0e-5/sqrt(12), 8.0e-5/sqrt(12), 0.514)
+    # Estimated the radiation length for the strip layers based on the total 
+    # radiation length of the SCT at eta = 0 from the plots in the report, 
+    # and assuming that the 4 layers are similar in terms of material budget.
     
     detector=Detector()
     detector.addlayer2(Pixel1)
